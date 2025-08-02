@@ -110,9 +110,9 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-boho-50 to-boho-100">
+    <div className="h-screen bg-gradient-to-br from-boho-50 to-boho-100 flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-boho-200 sticky top-0 z-10">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-boho-200 sticky top-0 z-10 flex-shrink-0">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-sage-600 rounded-xl flex items-center justify-center">
@@ -126,16 +126,17 @@ export default function Home() {
           <button
             onClick={() => setShowSettings(!showSettings)}
             className="btn-secondary"
+            type='button'
           >
-            <Settings className="w-5 h-5" />
-            Settings
+            <Settings className="w-4 h-4" />
+            <span>Settings</span>
           </button>
         </div>
       </header>
 
       {/* Settings Panel */}
       {showSettings && (
-        <div className="bg-white/90 backdrop-blur-sm border-b border-boho-200 p-4">
+        <div className="bg-white/90 backdrop-blur-sm border-b border-boho-200 p-4 flex-shrink-0">
           <div className="max-w-4xl mx-auto space-y-4">
             <div>
               <label className="block text-sm font-medium text-sage-700 mb-2">
@@ -182,10 +183,10 @@ export default function Home() {
       )}
 
       {/* Chat Container */}
-      <div className="max-w-4xl mx-auto px-4 py-6">
-        <div className="bg-white/60 backdrop-blur-sm rounded-2xl border border-boho-200 shadow-lg min-h-[600px] flex flex-col">
+      <div className="max-w-4xl mx-auto px-4 py-4 flex-1 flex flex-col min-h-0">
+        <div className="bg-white/60 backdrop-blur-sm rounded-2xl border border-boho-200 shadow-lg flex-1 flex flex-col min-h-0">
           {/* Messages */}
-          <div className="flex-1 p-6 overflow-y-auto space-y-4">
+          <div className="flex-1 p-6 overflow-y-auto space-y-4 min-h-0 h-0">
             {messages.length === 0 ? (
               <div className="text-center py-12">
                 <Bot className="w-16 h-16 text-sage-400 mx-auto mb-4" />
@@ -217,20 +218,20 @@ export default function Home() {
                 </div>
               ))
             )}
-            {isLoading && (
-              <div className="flex gap-3 justify-start">
-                <div className="w-8 h-8 bg-sage-600 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
-                <div className="chat-bubble-ai">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-sage-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-sage-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-2 h-2 bg-sage-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  </div>
-                </div>
-              </div>
-            )}
+                         {isLoading && (
+               <div className="flex gap-3 justify-start">
+                 <div className="w-8 h-8 bg-sage-600 rounded-full flex items-center justify-center flex-shrink-0">
+                   <Bot className="w-5 h-5 text-white" />
+                 </div>
+                 <div className="chat-bubble-ai px-6 py-4">
+                   <div className="flex space-x-2">
+                     <div className="w-3 h-3 bg-sage-400 rounded-full animate-bounce"></div>
+                     <div className="w-3 h-3 bg-sage-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                     <div className="w-3 h-3 bg-sage-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                   </div>
+                 </div>
+               </div>
+             )}
             <div ref={messagesEndRef} />
           </div>
 
@@ -243,7 +244,7 @@ export default function Home() {
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Type your message here..."
-                  className="input-field resize-none min-h-[60px] max-h-[120px]"
+                  className="input-field resize-none min-h-[60px] max-h-[120px] placeholder:text-sage-500"
                   rows={1}
                 />
               </div>
