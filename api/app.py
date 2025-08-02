@@ -3,10 +3,10 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 # Import Pydantic for data validation and settings management
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 # Import OpenAI client for interacting with OpenAI's API
 from openai import OpenAI
-import os
+import re
 from typing import Optional, List
 
 # Initialize FastAPI application with a title
@@ -22,10 +22,31 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers in requests
 )
 
+# Security: Input sanitization function
+def sanitize_text(text: str) -> str:
+    """Sanitize text input to prevent injection attacks"""
+    if not text:
+        return ""
+    # Remove potentially dangerous characters and normalize
+    sanitized = re.sub(r'[<>"\']', '', text.strip())
+    return sanitized[:10000]  # Limit message length
+
 # Define the data model for chat messages
 class ChatMessage(BaseModel):
     role: str  # 'user' or 'ai'
     content: str
+    
+    @validator('role')
+    def validate_role(cls, v):
+        if v not in ['user', 'ai']:
+            raise ValueError('Role must be either "user" or "ai"')
+        return v
+    
+    @validator('content')
+    def validate_content(cls, v):
+        if not v or len(v.strip()) == 0:
+            raise ValueError('Content cannot be empty')
+        return sanitize_text(v)
 
 # Define the data model for chat requests using Pydantic
 # This ensures incoming request data is properly validated
@@ -35,12 +56,45 @@ class ChatRequest(BaseModel):
     chat_history: List[ChatMessage] = []  # Full conversation history
     model: Optional[str] = "gpt-4.1-mini"  # Optional model selection with default
     api_key: str          # OpenAI API key for authentication
+    
+    @validator('developer_message')
+    def validate_developer_message(cls, v):
+        if not v or len(v.strip()) == 0:
+            raise ValueError('Developer message cannot be empty')
+        return sanitize_text(v)
+    
+    @validator('user_message')
+    def validate_user_message(cls, v):
+        if not v or len(v.strip()) == 0:
+            raise ValueError('User message cannot be empty')
+        return sanitize_text(v)
+    
+    @validator('model')
+    def validate_model(cls, v):
+        allowed_models = ['gpt-4.1-mini', 'gpt-4o-mini', 'gpt-3.5-turbo']
+        if v not in allowed_models:
+            raise ValueError(f'Model must be one of: {", ".join(allowed_models)}')
+        return v
+    
+    @validator('chat_history')
+    def validate_chat_history(cls, v):
+        if len(v) > 50:  # Limit conversation history to prevent abuse
+            raise ValueError('Chat history too long (max 50 messages)')
+        return v
+    
+    @validator('api_key')
+    def validate_api_key(cls, v):
+        if not v or len(v.strip()) == 0:
+            raise ValueError('API key cannot be empty')
+        if not v.startswith('sk-'):
+            raise ValueError('API key must start with "sk-"')
+        return v.strip()
 
 # Define the main chat endpoint that handles POST requests
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
     try:
-        # Initialize OpenAI client with the provided API key
+        # Initialize OpenAI client with the user-provided API key
         client = OpenAI(api_key=request.api_key)
         
         # Build the messages array for OpenAI API

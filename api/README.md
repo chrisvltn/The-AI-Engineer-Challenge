@@ -1,12 +1,19 @@
 # OpenAI Chat API Backend
 
-This is a FastAPI-based backend service that provides a streaming chat interface using OpenAI's API.
+This is a FastAPI-based backend service that provides a streaming chat interface using OpenAI's API with enhanced security measures. Users provide their own OpenAI API keys to pay for their own AI usage.
+
+## 🔒 Security Features
+
+- **User-provided API keys** - Users provide their own OpenAI API keys
+- **Input validation & sanitization** - Prevents injection attacks and ensures data integrity
+- **CORS protection** - Configurable cross-origin resource sharing
+- **Request validation** - Comprehensive input validation using Pydantic
 
 ## Prerequisites
 
 - Python 3.8 or higher
 - pip (Python package manager)
-- An OpenAI API key
+- Users need their own OpenAI API key
 
 ## Setup
 
@@ -45,8 +52,14 @@ The server will start on `http://localhost:8000`
 {
     "developer_message": "string",
     "user_message": "string",
+    "chat_history": [
+        {
+            "role": "user|ai",
+            "content": "string"
+        }
+    ],
     "model": "gpt-4.1-mini",  // optional
-    "api_key": "your-openai-api-key"
+    "api_key": "sk-your-openai-api-key"
 }
 ```
 - **Response**: Streaming text response
@@ -55,6 +68,15 @@ The server will start on `http://localhost:8000`
 - **URL**: `/api/health`
 - **Method**: GET
 - **Response**: `{"status": "ok"}`
+
+## Security Configuration
+
+### Input Validation
+- Message length limit: 10,000 characters
+- Chat history limit: 50 messages
+- Allowed models: `gpt-4.1-mini`, `gpt-4o-mini`, `gpt-3.5-turbo`
+- Input sanitization removes potentially dangerous characters
+- API key validation (must start with "sk-")
 
 ## API Documentation
 
@@ -68,9 +90,34 @@ The API is configured to accept requests from any origin (`*`). This can be modi
 
 ## Error Handling
 
-The API includes basic error handling for:
+The API includes comprehensive error handling for:
+- Invalid input validation (422)
 - Invalid API keys
 - OpenAI API errors
-- General server errors
+- General server errors (500)
 
-All errors will return a 500 status code with an error message. 
+## Production Deployment
+
+### Security Checklist
+- [ ] Use HTTPS in production
+- [ ] Set up proper logging
+- [ ] Configure firewall rules
+- [ ] Use a reverse proxy (nginx/Apache)
+- [ ] Set up monitoring and alerting
+
+## Troubleshooting
+
+### Common Issues
+1. **"API key must start with sk-"**
+   - Solution: Ensure you're using a valid OpenAI API key
+   
+2. **"Validation error"**
+   - Solution: Check your input format and ensure all required fields are present
+
+## Contributing
+
+When contributing to this API:
+- Follow security best practices
+- Add tests for new features
+- Update documentation for any changes
+- Ensure input validation is comprehensive 

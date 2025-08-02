@@ -143,13 +143,13 @@ export default function Home() {
                 OpenAI API Key
               </label>
               <div className="relative">
-                <input
-                  type="password"
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="Enter your OpenAI API key"
+              <input
+                type="password"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder="Enter your OpenAI API key"
                   className="input-field pr-10"
-                />
+              />
                 <Key className="w-5 h-5 text-sage-400 absolute right-3 top-1/2 transform -translate-y-1/2" />
               </div>
             </div>
