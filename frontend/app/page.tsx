@@ -43,6 +43,12 @@ export default function Home() {
     setIsLoading(true)
 
     try {
+      // Convert messages to the format expected by the API
+      const chatHistory = messages.map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }))
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -51,6 +57,7 @@ export default function Home() {
         body: JSON.stringify({
           developer_message: developerMessage,
           user_message: inputMessage,
+          chat_history: chatHistory,
           model: model,
           api_key: apiKey
         }),
