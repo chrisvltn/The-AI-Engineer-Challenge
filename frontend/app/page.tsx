@@ -137,7 +137,7 @@ export default function Home() {
       {/* Settings Panel */}
       {showSettings && (
         <div className="bg-white/90 backdrop-blur-sm border-b border-boho-200 p-4 flex-shrink-0">
-          <div className="max-w-4xl mx-auto space-y-4">
+          <div className="max-w-4xl mx-auto px-0 md:px-4 space-y-4">
             <div>
               <label className="block text-sm font-medium text-sage-700 mb-2">
                 OpenAI API Key
