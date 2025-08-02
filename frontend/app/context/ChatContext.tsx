@@ -19,6 +19,9 @@ interface ChatContextType {
   handleSendMessage: () => Promise<void>
   handleSettingsToggle: () => void
   
+  // Performance
+  throttledScroll: () => void
+  
   // Refs
   settingsButtonRef: React.RefObject<HTMLButtonElement>
 }
@@ -41,7 +44,8 @@ export function ChatProvider({ children }: ChatProviderProps) {
     announcement,
     settingsButtonRef,
     handleSendMessage,
-    handleSettingsToggle
+    handleSettingsToggle,
+    throttledScroll
   } = useChat()
 
   const value: ChatContextType = {
@@ -55,6 +59,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
     setSettings,
     handleSendMessage,
     handleSettingsToggle,
+    throttledScroll,
     settingsButtonRef
   }
 

@@ -5,6 +5,7 @@ import Header from './components/Header'
 import SettingsWrapper from './components/SettingsWrapper'
 import ChatContainer from './components/ChatContainer'
 import AccessibilityAnnouncements from './components/AccessibilityAnnouncements'
+import PerformanceMonitor from './components/PerformanceMonitor'
 
 export default function Home() {
   return (
@@ -17,6 +18,9 @@ export default function Home() {
         <SettingsWrapper />
 
         <ChatContainer />
+        
+        {/* Performance monitor - only show in development */}
+        {process.env.NODE_ENV === 'development' && <PerformanceMonitor show={true} />}
       </div>
     </ChatProvider>
   )
