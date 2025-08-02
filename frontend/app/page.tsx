@@ -237,24 +237,21 @@ export default function Home() {
 
           {/* Input Area */}
           <div className="p-6 border-t border-boho-200 bg-white/40">
-            <div className="flex gap-3">
-              <div className="flex-1">
-                <textarea
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Type your message here..."
-                  className="input-field resize-none min-h-[60px] max-h-[120px] placeholder:text-sage-500"
-                  rows={1}
-                />
-              </div>
+            <div className="relative flex items-center">
+              <textarea
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Type your message here..."
+                className="input-field resize-none min-h-[60px] max-h-[120px] placeholder:text-sage-500 pr-12 flex-1"
+                rows={1}
+              />
               <button
                 onClick={handleSendMessage}
                 disabled={!inputMessage.trim() || !apiKey.trim() || isLoading}
-                className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                className="absolute right-3 w-8 h-8 bg-sage-600 hover:bg-sage-700 disabled:bg-sage-400 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors duration-200"
               >
-                <Send className="w-5 h-5" />
-                Send
+                <Send className="w-4 h-4 text-white" />
               </button>
             </div>
             {!apiKey.trim() && (
