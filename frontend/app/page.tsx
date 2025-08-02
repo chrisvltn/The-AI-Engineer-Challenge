@@ -183,10 +183,10 @@ export default function Home() {
       )}
 
       {/* Chat Container */}
-      <div className="max-w-4xl mx-auto px-4 py-4 flex-1 flex flex-col min-h-0">
-        <div className="bg-white/60 backdrop-blur-sm rounded-2xl border border-boho-200 shadow-lg flex-1 flex flex-col min-h-0">
+      <div className="w-full md:max-w-4xl md:mx-auto px-0 md:px-4 md:py-4 py-0 flex-1 flex flex-col min-h-0">
+        <div className="md:bg-white/60 md:backdrop-blur-sm md:rounded-2xl md:border md:border-boho-200 md:shadow-lg flex-1 flex flex-col min-h-0">
           {/* Messages */}
-          <div className="flex-1 p-6 overflow-y-auto space-y-4 min-h-0 h-0">
+          <div className="flex-1 p-2 md:p-6 overflow-y-auto space-y-4 min-h-0 h-0">
             {messages.length === 0 ? (
               <div className="text-center py-12">
                 <Bot className="w-16 h-16 text-sage-400 mx-auto mb-4" />
@@ -236,7 +236,7 @@ export default function Home() {
           </div>
 
           {/* Input Area */}
-          <div className="p-6 border-t border-boho-200 bg-white/40">
+          <div className="p-3 md:p-6 border-t border-boho-200 bg-white/40">
             <div className="relative flex items-center">
               <textarea
                 value={inputMessage}
