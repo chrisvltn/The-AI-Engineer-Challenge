@@ -102,13 +102,6 @@ export default function Home() {
     }
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage()
-    }
-  }
-
   return (
     <div className="h-screen bg-gradient-to-br from-boho-50 to-boho-100 flex flex-col overflow-hidden">
       {/* Header */}
@@ -237,23 +230,25 @@ export default function Home() {
 
           {/* Input Area */}
           <div className="p-3 md:p-6 border-t border-boho-200 bg-white/40">
-            <div className="relative flex items-center">
+            <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="relative flex items-center">
               <textarea
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
                 placeholder="Type your message here..."
                 className="input-field resize-none min-h-[60px] max-h-[120px] placeholder:text-sage-500 pr-12 flex-1"
                 rows={1}
+                name="message"
+                aria-label="Chat message"
               />
               <button
-                onClick={handleSendMessage}
+                type="submit"
                 disabled={!inputMessage.trim() || !apiKey.trim() || isLoading}
                 className="absolute right-3 w-8 h-8 bg-sage-600 hover:bg-sage-700 disabled:bg-sage-400 disabled:cursor-not-allowed rounded-lg flex items-center justify-center transition-colors duration-200"
+                aria-label="Send message"
               >
                 <Send className="w-4 h-4 text-white" />
               </button>
-            </div>
+            </form>
             {!apiKey.trim() && (
               <p className="text-sm text-sage-600 mt-2">
                 ⚠️ Please enter your OpenAI API key in settings to start chatting
